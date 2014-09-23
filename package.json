@@ -1,0 +1,15 @@
+{
+  "name": "toboggan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "toboggan.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^2.3.2",
+    "should": "^4.0.4"
+  }
+}
