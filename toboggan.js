@@ -3,7 +3,8 @@ var basename = require('path').basename,
   Promise = require('bluebird');
 
 function Toboggan(request){
-  var expectations = [];
+  var expectations = [],
+    endings = [];
   
   if (!request.Test || !request.Test.prototype){
     throw new Error('Must pass a valid instance of supertest');
@@ -37,7 +38,16 @@ function Toboggan(request){
     return this;
   };
   
+  proto.endTemplate = function(fn){
+    endings.push(fn);
+    return this;
+  }
+  
   this.install = function(app, engine){
+    if (!engine){
+      throw new Error('You must supply a view engine (e.g "jade")');
+    }
+    
     app.engine(engine, renderFile);
   };
   
@@ -57,6 +67,18 @@ function Toboggan(request){
     }
     
     Promise.all(pending).then(function(){
+      for (var i = 0; i < endings.length; i++){
+        endings[i]();
+      }
+    })
+    .caught(function(error){
+      for (var i = 0; i < endings.length; i++){
+        endings[i](error);
+      }
+    })
+    .finally(function(){
+      expectations = [];
+      endings = [];
       callback();
     });
   };

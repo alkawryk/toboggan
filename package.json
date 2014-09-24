@@ -11,5 +11,9 @@
   "dependencies": {
     "bluebird": "^2.3.2",
     "should": "^4.0.4"
+  },
+  "devDependencies": {
+    "express": "^4.9.4",
+    "supertest": "^0.13.0"
   }
 }
