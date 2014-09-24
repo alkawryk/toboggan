@@ -30,11 +30,7 @@ function Toboggan(request){
     } else if (typeof(arguments[0]) === 'function'){
       expectations.push(arguments[0]);
     }
-    
-    if (arguments.length === 2 && typeof(arguments[1]) === 'function'){
-      arguments[1]();
-    }
-    
+
     return this;
   };
   
