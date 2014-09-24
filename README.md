@@ -65,12 +65,16 @@ var request = require('supertest'),
   
   // more app set up here ... 
   
-  toboggan.install(app);
+  toboggan.install(app, 'jade');
 ```
 
   Ontop of the regular `.expect` and `.end` supertest functions, you will now have access to `.expectTemplate` and `.endTemplate` functions, described below. 
 
 ## Supported APIs
+
+### .install(express app, extension)
+
+  Sets up the app to use the mock template engine for the supplied extension. Note this will overwrite an existing view engine, if one is configured. 
 
 ### .expectTemplate(string or fn)
 
