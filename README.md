@@ -68,7 +68,7 @@ var request = require('supertest'),
   toboggan.install(app, 'jade');
 ```
 
-  Ontop of the regular `.expect` and `.end` supertest functions, you will now have access to `.expectTemplate` and `.endTemplate` functions, described below. 
+  Ontop of the regular `.expect` and `.end` supertest functions, you will now have access to the `.expectTemplate` function, described below. 
 
 ## Supported APIs
 
@@ -86,14 +86,10 @@ var request = require('supertest'),
 * `verified` needs to be called when you're done 
   
   Note that asynchronous verifications are supported. Also note that `.expectTemplate` can be called multiple times, and all functions will finish executing
-  before `.end` executes. 
-
-### .endTemplate(fn)
-
-  Any function passed to `.endTemplate` will execute after the template has rendered and all of the expected assertions have finished executing. Any 
-  errors arising during the executing of an assertion will be passed as the first parameter to `fn`. 
+  before `.end` executes.
   
-  This method is chainable and the functions will execute in the order that they are passed.
+  Any errors arising during the execution of an `.expectTemplate` assertion will be passed as the first parameter to the function supplied to supertest's 
+  `.end` function. 
   
 ## License
 

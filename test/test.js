@@ -17,25 +17,20 @@ describe('toboggan.js', function(){
     request(app)
       .get('/user')
       .expectTemplate('incorrect')
-      .endTemplate(function(err){
+      .end(function(err){
         try {
           'user.jade'.should.equal('incorrect')
         } catch (e) {
           err.should.eql(e);
         }
-      })
-      .end(done);  
+        done();
+      });  
   });
   
   it('should not throw an error when the template name is correct', function(done){
     request(app)
       .get('/user')
       .expectTemplate('user.jade')
-      .endTemplate(function(err){
-        if (err){
-          throw new Error('Expected ' + err + ' to be null');
-        }
-      })
       .end(done);
   });
   
@@ -47,10 +42,10 @@ describe('toboggan.js', function(){
       .expectTemplate(function(){
         throw expectedError;
       })
-      .endTemplate(function(err){
+      .end(function(err){
         err.should.equal(expectedError);
-      })
-      .end(done);
+        done();
+      });
   });
   
   it('should pass the path passed to response.render to expectedTemplate', function(done){

@@ -4,7 +4,7 @@ var basename = require('path').basename,
 
 function Toboggan(request){
   var expectations = [],
-    endings = [];
+    err = null;
   
   if (!request.Test || !request.Test.prototype){
     throw new Error('Must pass a valid instance of supertest');
@@ -34,9 +34,26 @@ function Toboggan(request){
     return this;
   };
   
-  proto.endTemplate = function(fn){
-    endings.push(fn);
-    return this;
+  var end = proto.end;
+  proto.end = function(fn){
+    var me = this;
+    var promise = new Promise(function(fulfill, reject){
+      end.call(me, function(err, res){
+        fulfill({
+          err: err,
+          res: res
+        });
+      });
+    });
+    
+    promise.then(function(vals){
+      if (err){
+        fn(err);
+        err = null;
+      } else {
+        fn(vals.err, vals.res);
+      }
+    });
   }
   
   this.install = function(app, engine){
@@ -62,24 +79,12 @@ function Toboggan(request){
       }));
     }
     
-    Promise.all(pending).then(function(){
-      for (var i = 0; i < endings.length; i++){
-        endings[i]();
-      }
-    })
-    .caught(function(error){
-      if (endings.length > 0){
-        for (var i = 0; i < endings.length; i++){
-          endings[i](error);
-        }
-      } else {
-        throw error;
-      }
+    Promise.all(pending).caught(function(error){
+      err = error;
     })
     .finally(function(){
-      expectations = [];
-      endings = [];
       callback();
+      expectations = [];
     });
   };
   
