@@ -93,13 +93,13 @@ function Toboggan(request){
         });
       }));
     }
+    expectations = [];
     
     Promise.all(pending).caught(function(error){
       err = error;
     })
     .finally(function(){
       callback();
-      expectations = [];
     });
   };
   

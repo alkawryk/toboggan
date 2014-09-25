@@ -49,6 +49,22 @@ describe('toboggan.js', function(){
       });
   });
   
+  it('should pass errors thrown in an asynchronous fashion (by passing to verified) to .end', function(done){
+    var expectedError = new Error('error');
+    
+    request(app)
+      .get('/user')
+      .expectTemplate(function(path, options, verified){
+        setTimeout(function(){
+          verified(expectedError);
+        }, 10);
+      })
+      .end(function(err){
+        err.should.equal(expectedError);
+        done();
+      });
+  });
+  
   it('should return failed regular assertions to end', function(done){
     request(app)
       .get('/user')
