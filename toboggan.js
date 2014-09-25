@@ -68,8 +68,12 @@ function Toboggan(request){
       }
     })
     .caught(function(error){
-      for (var i = 0; i < endings.length; i++){
-        endings[i](error);
+      if (endings.length > 0){
+        for (var i = 0; i < endings.length; i++){
+          endings[i](error);
+        }
+      } else {
+        throw error;
       }
     })
     .finally(function(){

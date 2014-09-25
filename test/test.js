@@ -57,7 +57,7 @@ describe('toboggan.js', function(){
     request(app)
       .get('/user')
       .expectTemplate(function(path, options, verified){
-        path.should.equal(__dirname + '/user.jade');
+        path.should.equal(__dirname + '/views/user.jade');
         verified();
       })
       .end(done);
@@ -77,11 +77,11 @@ describe('toboggan.js', function(){
     var executed1 = false, executed2 = false;
     request(app)
       .get('/user')
-      .expectTemplate(function(verified){
+      .expectTemplate(function(path, options, verified){
         executed1 = true;
         verified();
       })
-      .expectTemplate(function(verified){
+      .expectTemplate(function(path, options, verified){
         executed2 = true;
         verified();
       })
