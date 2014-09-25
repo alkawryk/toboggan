@@ -49,6 +49,33 @@ describe('toboggan.js', function(){
       });
   });
   
+  it('should return failed regular assertions to end', function(done){
+    request(app)
+      .get('/user')
+      .expect(500) // should be 200 
+      .end(function(err){
+        if (!err){
+          throw new Error('Expected an error');
+        }
+        
+        done();
+      });
+  });
+  
+  it('should return errors thrown in a regular .expect to .end', function(done){
+    var expectedError = new Error('error');
+    
+    request(app)
+      .get('/user')
+      .expect(function(){
+        throw expectedError;
+      })
+      .end(function(err){
+        err.should.equal(expectedError);
+        done();
+      });
+  });
+  
   it('should pass the path passed to response.render to expectedTemplate', function(done){
     request(app)
       .get('/user')
