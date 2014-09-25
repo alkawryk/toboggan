@@ -11,6 +11,7 @@
   "repository": "https://github.com/alkawryk/toboggan.git",
   "dependencies": {
     "bluebird": "^2.3.2",
+    "lodash": "^2.4.1",
     "should": "^4.0.4"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
-var app = require('express')(),
+var express = require('express'),
+  app = express(),
   request = require('supertest'),
   toboggan = require('../toboggan')(request);
   
@@ -34,7 +35,7 @@ describe('toboggan.js', function(){
       .end(done);
   });
   
-  it('should return an error to the endTemplate function when expectTemplate throws an error', function(done){
+  it('should return an error to the end function when expectTemplate throws an error', function(done){
     var expectedError = new Error('error');
     
     request(app)
@@ -106,6 +107,42 @@ describe('toboggan.js', function(){
       .end(function(){
         executed.should.eql([2, 1]);
         done();
+      });
+  });
+  
+  it('should revert to the previously set engine when uninstalled is called', function(done){
+    var testapp = express(),
+      testtoboggan = require('../toboggan')(request);
+    testapp.set('views', __dirname + '/views');
+
+    var oldEngine = false;
+    testapp.engine('jade', function(){
+      oldEngine = true; 
+      
+      // supertest doesn't seem to let me call .end twice,
+      // but lets me make two requests. 
+      // If I call .done() in the old template engine, the test should 
+      // finish executing on the second request since we should have 
+      // reverted back to this template engine 
+      done();
+    });
+    
+    testtoboggan.install(testapp, 'jade');
+    
+    testapp.get('/test', function(req, res){
+      res.render('user.jade');
+    });
+
+    request(testapp)
+      .get('/test')
+      .end(function(){
+        oldEngine.should.equal(false);
+        
+        testtoboggan.uninstall(testapp);
+        
+        request(testapp)
+          .get('/test')
+          .end();
       });
   });
 });

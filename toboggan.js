@@ -1,10 +1,13 @@
 var basename = require('path').basename,
   should = require('should'),
-  Promise = require('bluebird');
+  Promise = require('bluebird'),
+  _ = require('lodash');
 
 function Toboggan(request){
   var expectations = [],
-    err = null;
+    err = null,
+    engines = null,
+    app = null;
   
   if (!request.Test || !request.Test.prototype){
     throw new Error('Must pass a valid instance of supertest');
@@ -56,12 +59,24 @@ function Toboggan(request){
     });
   }
   
-  this.install = function(app, engine){
+  this.install = function(application, engine){
     if (!engine){
       throw new Error('You must supply a view engine (e.g "jade")');
     }
     
+    if (app){
+      throw new Error('Toboggan can only be installed on one app at a time');
+    }
+    
+    app = application;
+    engines = _.clone(app.engines);
     app.engine(engine, renderFile);
+  };
+  
+  this.uninstall = function(){
+    if (app && engines){
+      app.engines = engines;
+    }
   };
   
   var renderFile = function(path, options, callback){

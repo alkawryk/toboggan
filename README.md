@@ -76,6 +76,10 @@ var request = require('supertest'),
 
   Sets up the app to use the mock template engine for the supplied extension. Note this will overwrite an existing view engine, if one is configured. 
 
+### .uninstall()
+
+  Reverts any mocked-out template engines back to their original configuration before `.install` was called
+
 ### .expectTemplate(string or fn)
 
   Adds a template related assertion. When the only argument is a string, the name of the actual template rendered should equal the supplied parameter. 
