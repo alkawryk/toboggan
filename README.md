@@ -89,7 +89,8 @@ var request = require('supertest'),
   before `.end` executes.
   
   Any errors arising during the execution of an `.expectTemplate` assertion will be passed as the first parameter to the function supplied to supertest's 
-  `.end` function. 
+  `.end` function. Typically, you would be passing mocha's `done` function to `.end`, which would fail the test if any template related assertions have failed.
+
   
 ## License
 
