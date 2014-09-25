@@ -1,7 +1,7 @@
 {
   "name": "toboggan",
   "version": "1.0.0",
-  "description": "",
+  "description": "mock template engine and testing framework for express",
   "main": "toboggan.js",
   "scripts": {
     "test": "mocha test/*"
